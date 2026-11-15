@@ -1,0 +1,47 @@
+# AIGuard with PostgreSQL.
+#
+#   cd deployment/docker
+#   cp .env.example .env    # then set real values
+#   docker compose up --build
+#
+# No secrets have defaults: compose refuses to start until they are set.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aiguard
+      POSTGRES_USER: aiguard
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiguard -d aiguard"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  aiguard:
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      AIGUARD_DATABASE_URL: postgresql+psycopg://aiguard:${POSTGRES_PASSWORD}@db:5432/aiguard
+      AIGUARD_API_KEYS: ${AIGUARD_API_KEYS:?set AIGUARD_API_KEYS in .env}
+      AIGUARD_ARTIFACT_DIR: /data/artifacts
+    volumes:
+      - artifacts:/data/artifacts
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  db-data:
+  artifacts:

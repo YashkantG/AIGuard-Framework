@@ -1,0 +1,91 @@
+# Built-in AIGuard governance policies.
+# Copy this file, edit it, keep it in version control, and point
+# AIGUARD_POLICY_FILE at your copy to replace the defaults.
+version: 1
+policies:
+  - id: GOV-DOC-001
+    title: Model documentation is complete
+    category: documentation
+    severity: medium
+    check: documentation_complete
+    params:
+      required_fields: [description, owner, intended_use]
+    description: Every registered model states what it is, who owns it and what it is for.
+    remediation: Fill in the description, owner and intended use of the model.
+
+  - id: GOV-PRV-001
+    title: Training data provenance is recorded
+    category: provenance
+    severity: high
+    check: dataset_provenance
+    description: The model's lineage reaches at least one fingerprinted dataset.
+    remediation: Record the dataset, transformation and training run, and link them to the model.
+
+  - id: GOV-INT-001
+    title: Artifact integrity is verified
+    category: integrity
+    severity: high
+    check: evidence_status
+    params:
+      kind: integrity
+      required_status: pass
+    description: The most recent integrity verification matched the registered digest.
+    remediation: Run an integrity verification against the artifact that will be deployed.
+
+  - id: GOV-SEC-001
+    title: No open high-severity security findings
+    category: security
+    severity: high
+    check: no_open_findings
+    params:
+      max_severity: medium
+    description: A security assessment has run and reports nothing above medium severity.
+    remediation: Run a security assessment and resolve high and critical findings.
+
+  - id: GOV-XAI-001
+    title: An explanation is available
+    category: explainability
+    severity: medium
+    check: evidence_status
+    params:
+      kind: explanation
+    description: Feature attribution has been generated and retained for the model.
+    remediation: Generate an explanation report for the model.
+
+  - id: GOV-RSK-001
+    title: Risk assessment is complete
+    category: risk
+    severity: medium
+    check: evidence_status
+    params:
+      kind: risk_assessment
+    description: The model has a recorded risk assessment.
+    remediation: Run a risk assessment for the model.
+
+  - id: GOV-MON-001
+    title: Drift monitoring is current
+    category: monitoring
+    severity: medium
+    check: evidence_status
+    params:
+      kind: drift
+      max_age_days: 30
+    description: Drift has been evaluated within the last 30 days.
+    remediation: Evaluate drift on recent production data.
+
+  - id: GOV-HUM-001
+    title: Human oversight is defined for high-impact models
+    category: oversight
+    severity: high
+    check: human_oversight_defined
+    applies_to_tiers: [high]
+    description: High-impact models name the people or process able to review and override them.
+    remediation: Record who reviews this model's decisions and how they can intervene.
+
+  - id: GOV-AUD-001
+    title: Audit records are available
+    category: audit
+    severity: medium
+    check: audit_records_available
+    description: The model has audit history and the audit chain verifies.
+    remediation: Investigate the audit log; a broken chain means records were altered.

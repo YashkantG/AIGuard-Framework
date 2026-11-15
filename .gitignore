@@ -14,3 +14,6 @@ htmlcov/
 site/
 .idea/
 .vscode/
+.claude/
+aiguard.db
+artifacts/

@@ -8,6 +8,11 @@
 **Technology:** Python, FastAPI, PostgreSQL, Docker, Kubernetes  
 **License:** Apache License 2.0 (proposed, subject to IP review)
 
+> **Implementation note (v0.1.0).** This is the original design document. An alpha
+> implementation of the modules described here now exists in `src/aiguard`. Where
+> the code differs from this proposal, the [README](../README.md) and the other
+> documents in this folder describe what is actually implemented.
+
 ---
 
 # 1. Executive Summary

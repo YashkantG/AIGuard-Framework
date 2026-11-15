@@ -1,0 +1,53 @@
+# Example: gate a model artifact in your own repository's pipeline.
+# Copy to .github/workflows/model-gate.yml in the repository that holds the model.
+#
+# The job fails when the scanner or the security assessment reports a high or
+# critical finding, or when the artifact does not match its registered digest.
+name: Model gate
+
+on:
+  pull_request:
+    paths: ["models/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    env:
+      MODEL_PATH: models/model.safetensors
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install AIGuard
+        run: pip install "git+https://github.com/YashkantG/AIGuard-Framework.git"
+
+      - name: Scan the artifact (static; the model is never loaded)
+        run: aiguard scan "$MODEL_PATH" --fail-on high
+
+      - name: Register, verify and evaluate policies
+        run: |
+          MODEL_ID=$(aiguard register my-model "${GITHUB_SHA::12}" "$MODEL_PATH" \
+            --owner "ML Platform" \
+            --description "Model built from ${GITHUB_SHA}" \
+            --intended-use "Describe the intended use here" \
+            | python -c "import json, sys; print(json.load(sys.stdin)['id'])")
+          aiguard verify "$MODEL_ID"
+          aiguard assess "$MODEL_ID"
+          aiguard report "$MODEL_ID" --output governance-report.md
+          # `aiguard gate "$MODEL_ID"` fails unless every policy passes. Policies
+          # such as drift monitoring and lineage need evidence that accumulates
+          # over time, so only add the gate once AIGUARD_DATABASE_URL points at a
+          # persistent database (store it as a repository secret). With the
+          # throwaway SQLite file used here, the gate would always fail.
+
+      - name: Keep the evidence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-report
+          path: governance-report.md
+          if-no-files-found: ignore
