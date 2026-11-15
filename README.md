@@ -13,6 +13,8 @@ AIGuard helps you trust the machine learning models you deploy. It answers five 
 
 Status: alpha (0.1.0).
 
+![AIGuard dashboard overview](docs/images/overview.png)
+
 ## Install
 
 Requires Python 3.12 or newer.
@@ -31,6 +33,52 @@ aiguard serve
 ```
 
 Open http://127.0.0.1:8000 and paste the admin key that `aiguard serve` prints. You will see three sample models: one healthy, one with data drift, and one with a dangerous file.
+
+The **Get started** page inside the dashboard shows these steps, plus copy-ready commands for the command line, Python, the REST API and deployment.
+
+## What the dashboard looks like
+
+**1. Sign in** with the key printed by `aiguard serve`.
+
+![Sign-in screen](docs/images/signin.png)
+
+**2. Overview** shows how many checks pass across all models and what needs attention. A light theme is one click away.
+
+![Overview in the light theme](docs/images/overview-light.png)
+
+**3. Models** lists every model with its integrity, security, drift, policy and risk status.
+
+![Models list](docs/images/models.png)
+
+**4. A model page** shows its five checks and risk score. Press **Run all checks** to verify, scan, score and evaluate it in one go.
+
+![Model summary](docs/images/model-summary.png)
+
+**5. Security** lists what the scanner found in the model file and how to fix it.
+
+![Security findings](docs/images/model-security.png)
+
+**6. Drift** shows which features have shifted since training.
+
+![Drift results](docs/images/model-drift.png)
+
+**7. Explainability** shows which features drive the model's output.
+
+![Feature attribution](docs/images/model-explain.png)
+
+**8. Governance** shows each policy, whether it passes, and the evidence behind it.
+
+![Governance policies](docs/images/model-governance.png)
+
+**9. Lineage** traces the model back to its training data.
+
+![Lineage](docs/images/model-lineage.png)
+
+**10. Get started** has step-by-step instructions with copy buttons.
+
+![Get started guide](docs/images/guide.png)
+
+All screenshots use made-up demo data.
 
 ## Example: is this model file safe?
 
