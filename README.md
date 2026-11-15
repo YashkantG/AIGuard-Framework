@@ -154,6 +154,14 @@ aiguard gate <model-id>                 # do all policies pass?
 aiguard report <model-id>               # evidence report
 ```
 
+## Use it as an AI agent skill
+
+[`skills/model-file-scanner`](skills/model-file-scanner) packages the model file scanner as a skill for AI coding agents. It is a `SKILL.md` plus one Python script with no dependencies, so an agent can check a model file before loading it:
+
+```bash
+python skills/model-file-scanner/scripts/scan_model.py downloaded_model.pkl
+```
+
 ## Learn more
 
 - [Configuration and deployment](docs/configuration.md)
