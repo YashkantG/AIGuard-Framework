@@ -1,7 +1,7 @@
-"""AIGuard SDK quickstart, using only synthetic data.
+"""Example 4: the full lifecycle on a real scikit-learn model (synthetic data).
 
     pip install -e ".[dev]"
-    python examples/quickstart.py
+    python examples/04_full_lifecycle.py
 
 Trains a small scikit-learn model, registers it, and walks through integrity,
 security, drift, explainability, lineage, risk and policy evaluation.

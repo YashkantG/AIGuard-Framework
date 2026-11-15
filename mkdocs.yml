@@ -3,6 +3,7 @@ site_description: Open framework for AI model governance and security
 repo_url: https://github.com/YashkantG/AIGuard-Framework
 docs_dir: docs
 nav:
+  - Configuration: configuration.md
   - Architecture: architecture.md
   - Security model: security-model.md
   - Threat model: threat-model.md
